@@ -15,7 +15,7 @@ import (
 
 	"github.com/fforchino/vector-go-sdk/pkg/vector"
 	"github.com/kercre123/wire-pod/chipper/pkg/logger"
-	"github.com/sashabaranov/go-openai"
+	"github.com/openai/openai-go"
 	"github.com/wlynxg/anet"
 )
 

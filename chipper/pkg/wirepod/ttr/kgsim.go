@@ -18,7 +18,8 @@ import (
 	"github.com/fforchino/vector-go-sdk/pkg/vectorpb"
 	"github.com/kercre123/wire-pod/chipper/pkg/logger"
 	"github.com/kercre123/wire-pod/chipper/pkg/vars"
-	"github.com/sashabaranov/go-openai"
+	//"github.com/sashabaranov/go-openai"
+	"github.com/openai/openai-go"
 )
 
 func GetChat(esn string) vars.RememberedChat {
@@ -150,9 +151,10 @@ func CreateAIReq(transcribedText, esn string, gpt3tryagain, isKG bool) openai.Ch
 
 	var model string
 
-	if gpt3tryagain {
-		model = openai.GPT3Dot5Turbo
-	} else if vars.APIConfig.Knowledge.Provider == "openai" {
+	// if gpt3tryagain {
+	// 	model = openai.GPT3Dot5Turbo
+	// } else 
+	if vars.APIConfig.Knowledge.Provider == "openai" {
 		model = openai.GPT4oMini
 		logger.Println("Using " + model)
 	} else {
@@ -160,22 +162,28 @@ func CreateAIReq(transcribedText, esn string, gpt3tryagain, isKG bool) openai.Ch
 		model = vars.APIConfig.Knowledge.Model
 	}
 
-	smsg.Content = CreatePrompt(smsg.Content, model, isKG)
+	var appendage = ""
+	smsg.Content, appendage = CreatePrompt(smsg.Content, model, isKG)
 
 	nChat = append(nChat, smsg)
 	if vars.APIConfig.Knowledge.SaveChat {
 		rchat := GetChat(esn)
 		logger.Println("Using remembered chats, length of " + fmt.Sprint(len(rchat.Chats)) + " messages")
+		logger.Println(rchat.Chats)
 		nChat = append(nChat, rchat.Chats...)
 	}
 	nChat = append(nChat, openai.ChatCompletionMessage{
 		Role:    openai.ChatMessageRoleUser,
 		Content: transcribedText,
 	})
+	nChat = append(nChat, openai.ChatCompletionMessage{
+		Role: 		openai.ChatMessageRoleSystem,
+		Content:	appendage,
+	})
 
 	aireq := openai.ChatCompletionRequest{
 		Model:            model,
-		MaxTokens:        2048,
+		MaxCompletionTokens:        4000,
 		Temperature:      1,
 		TopP:             1,
 		FrequencyPenalty: 0,
@@ -257,6 +265,10 @@ func StreamingKGSim(req interface{}, esn string, transcribedText string, isKG bo
 	speakReady := make(chan string)
 	successIntent := make(chan bool)
 
+	if (transcribedText == ""){
+		transcribedText = "You did not hear me, ask again."
+	}
+
 	aireq := CreateAIReq(transcribedText, esn, false, isKG)
 
 	stream, err := c.CreateChatCompletionStream(ctx, aireq)
@@ -335,7 +347,7 @@ func StreamingKGSim(req interface{}, esn string, transcribedText string, isKG bo
 						},
 						esn)
 				}
-				logger.LogUI("LLM response for " + esn + ": " + newStr)
+				logger.Println("LLM response for " + esn + ": " + newStr)
 				logger.Println("LLM stream finished")
 				return
 			}
@@ -345,10 +357,10 @@ func StreamingKGSim(req interface{}, esn string, transcribedText string, isKG bo
 				return
 			}
 
-            		if (len(response.Choices) == 0) {
-                		logger.Println("Empty response")
-                		return
-            		}
+			if (len(response.Choices) == 0) {
+				logger.Println("Empty response")
+				return
+			}
 
 			fullfullRespText = fullfullRespText + removeSpecialCharacters(response.Choices[0].Delta.Content)
 			fullRespText = fullRespText + removeSpecialCharacters(response.Choices[0].Delta.Content)

@@ -1,6 +1,8 @@
 module github.com/kercre123/wire-pod/chipper
 
-go 1.18
+go 1.21
+
+toolchain go1.22.4
 
 require (
 	github.com/Picovoice/leopard/binding/go/v2 v2.0.2
@@ -15,21 +17,20 @@ require (
 	github.com/go-audio/audio v1.0.0
 	github.com/go-audio/wav v1.1.0
 	github.com/golang-jwt/jwt v3.2.2+incompatible
-	github.com/google/uuid v1.5.0
+	github.com/google/uuid v1.6.0
 	github.com/kercre123/vosk-api/go v1.0.2
 	github.com/kercre123/zeroconf v1.0.1
 	github.com/maxhawkins/go-webrtcvad v0.0.0-20210121163624-be60036f3083
 	github.com/ncruces/zenity v0.10.10
 	github.com/orcaman/writerseeker v0.0.0-20200621085525-1d3f536ff85e
 	github.com/pkg/errors v0.9.1
-	github.com/sashabaranov/go-openai v1.27.1
 	github.com/soheilhy/cmux v0.1.5
 	github.com/soundhound/houndify-sdk-go v0.3.5
 	github.com/vadv/gopher-lua-libs v0.5.0
 	github.com/wlynxg/anet v0.0.1
 	github.com/yuin/gopher-lua v1.1.1
-	golang.org/x/crypto v0.21.0
-	golang.org/x/text v0.14.0
+	golang.org/x/crypto v0.32.0
+	golang.org/x/text v0.21.0
 	google.golang.org/grpc v1.60.0
 	gopkg.in/ini.v1 v1.67.0
 )
@@ -77,6 +78,7 @@ require (
 	github.com/miekg/dns v1.1.41 // indirect
 	github.com/mitchellh/mapstructure v1.4.3 // indirect
 	github.com/montanaflynn/stats v0.6.3 // indirect
+	github.com/openai/openai-go v0.1.0-beta.10 // indirect
 	github.com/pelletier/go-toml v1.8.0 // indirect
 	github.com/prometheus/client_golang v1.11.1 // indirect
 	github.com/prometheus/client_model v0.2.0 // indirect
@@ -92,10 +94,14 @@ require (
 	github.com/spf13/viper v1.7.1 // indirect
 	github.com/subosito/gotenv v1.2.0 // indirect
 	github.com/technoweenie/multipartstreamer v1.0.1 // indirect
+	github.com/tidwall/gjson v1.14.4 // indirect
+	github.com/tidwall/match v1.1.1 // indirect
+	github.com/tidwall/pretty v1.2.1 // indirect
+	github.com/tidwall/sjson v1.2.5 // indirect
 	github.com/yuin/gluamapper v0.0.0-20150323120927-d836955830e7 // indirect
 	golang.org/x/image v0.10.0 // indirect
-	golang.org/x/net v0.22.0 // indirect
-	golang.org/x/sys v0.18.0 // indirect
+	golang.org/x/net v0.34.0 // indirect
+	golang.org/x/sys v0.29.0 // indirect
 	google.golang.org/genproto v0.0.0-20231002182017-d307bd883b97 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20231002182017-d307bd883b97 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20231002182017-d307bd883b97 // indirect
